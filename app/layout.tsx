@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -48,6 +49,11 @@ export default function RootLayout({
             <p>Need to speak to a person? Contact your council directly.</p>
           </div>
         </footer>
+
+        {/* Vercel Web Analytics: page views only, no cookies, no
+            cross-site tracking. Custom events are a paid feature, so the
+            funnel that actually matters is in /api/events instead. */}
+        <Analytics />
       </body>
     </html>
   );

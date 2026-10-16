@@ -155,6 +155,66 @@ type gives `415`, an empty recording `400`, oversized audio `413`.
 
 ---
 
+## Analytics
+
+Two layers, because the free one does not answer the question that matters.
+
+**Vercel Web Analytics** (`<Analytics />` in the layout) gives page views and
+visitors, free, no cookies. Enable it in the Vercel dashboard under
+**Analytics**. It will not tell you where people give up, because the whole
+form is one page with client-side stages — and Vercel's custom events, which
+could, are a Pro-plan feature.
+
+**The funnel** (`/api/events` → Upstash Redis → `/stats`) is therefore our
+own. It answers the question a council will actually ask: *where do people
+give up?* Visit **`/stats`** on your deployment.
+
+It records: starts, completions, prints, which question number each person
+reached, microphone attempts and failures, how many answered in a language
+other than English and which languages, and where validation warnings and
+errors fire.
+
+### Why it collects no personal data
+
+Residents using this are telling a council about damp in a child's bedroom
+and how little money they have. None of that may reach an analytics system,
+so the design makes leaking impossible rather than merely discouraged:
+
+1. **Aggregate counters only.** Every event increments a number. No rows, no
+   session ids, no per-event timestamps, no IP addresses. There is nothing to
+   re-identify because nothing individual is stored.
+2. **A closed event vocabulary.** Event names are an enum checked
+   server-side. A free-text name is rejected, so an answer cannot be passed
+   through the endpoint even deliberately.
+3. **No payload.** The only variable parts are a question *index* (a number)
+   and a language *code* matched against a strict pattern. Never question
+   text, never answer text.
+
+Four tests in `tests/analytics.test.ts` enforce this, including two that read
+the source and fail if anyone adds a field capable of carrying content. A
+browser test confirms no payload contains the typed answer or the question
+wording.
+
+The practical effect: you can tell a council's information governance officer
+this collects no personal data, and the code backs it up. **It still needs a
+DPIA before real residents use it** — "no personal data" is a conclusion for
+them to reach, not for us to assert.
+
+### Events have their own rate limit
+
+600/min, separate from the 60/min AI budget. Sharing one budget would let
+counting people exhaust the allowance for transcribing them — a resident
+unable to use the microphone because the app had spent its quota on
+analytics.
+
+### Reading the drop-off correctly
+
+A question's "lost" count compares it against the **highest reach of any
+later question**, not simply the next one. Conditional questions like
+`safety_detail` only appear for one answer, so few people reach them by
+design — comparing against the next question directly makes the question
+before a conditional look like a cliff when nothing is wrong.
+
 ## Running it locally
 
 ```bash
@@ -168,7 +228,7 @@ typed, validation works, the summary prints. The microphone button reports
 that voice is switched off.
 
 ```bash
-npm test           # 36 tests, no network, no Redis, no API key needed
+npm test           # 45 tests, no network, no Redis, no API key needed
 npm run build
 ```
 
@@ -224,14 +284,18 @@ app/
   form/[id]/FormRunner.tsx   one question at a time, voice first
   form/[id]/useRecorder.ts   microphone capture and upload
   api/transcribe/route.ts    the only paid route — rate limited
+  api/events/route.ts        funnel counters — closed vocabulary, no payload
+  api/stats/route.ts         reads the funnel back
   api/status/route.ts        limiter configuration and headroom
+  stats/page.tsx             the drop-off dashboard
   globals.css                design tokens, print and dark mode
 lib/
   ratelimit.ts               60/min global, Redis with in-memory fallback
   transcription.ts           prompt, JSON schema, audio limits
+  analytics.ts               the closed event vocabulary and key shapes
   validate.ts                the rule engine — no AI, no network
   forms/                     form definitions as data; add yours here
-tests/                       36 tests
+tests/                       45 tests
 ```
 
 ## Accessibility
@@ -271,13 +335,17 @@ Honest list, better said than asked:
 - **Voice is not offered on multiple-choice questions.** Mapping spoken words
   onto a fixed option is a decision about someone's answer, not a
   transcription of it, so it is left to a tap.
-- **No analytics**, so completion and drop-off cannot yet be measured. Those
-  are the numbers that would prove this works, and they need a DPIA first.
+- **The funnel has no real data yet.** The `/stats` dashboard works, but it
+  only becomes evidence once people have used it. Run a few residents or
+  classmates through it before the day so you have numbers to show.
+- **A DPIA is still needed** before real residents use it, even though the
+  analytics collect no personal data.
 - **The global-only limit** locks everyone out when one person floods it.
 
 ## Tech
 
-Next.js 16 (App Router) · TypeScript · Google Gemini · Upstash Redis · plain
+Next.js 16 (App Router) · TypeScript · Google Gemini · Upstash Redis ·
+Vercel Analytics · plain
 CSS, no framework. 0 known vulnerabilities.
 
 Sources: [Gemini audio understanding](https://ai.google.dev/gemini-api/docs/audio) ·

@@ -837,6 +837,115 @@ textarea::placeholder {
   margin-bottom: 6px;
 }
 
+/* --- Stats dashboard --------------------------------------------- */
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin: 16px 0 20px;
+}
+
+.stat {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.funnel {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.funnel-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.funnel-row:last-child {
+  border-bottom: 0;
+}
+
+.funnel-label {
+  font-size: 0.9375rem;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.funnel-n {
+  flex: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+  min-width: 1.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.funnel-track {
+  display: block;
+  height: 10px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.funnel-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  min-width: 2px;
+}
+
+.funnel-count {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.funnel-count em {
+  color: var(--danger);
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+@media (min-width: 34rem) {
+  .funnel-row {
+    grid-template-columns: 1fr 120px 70px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .funnel-count {
+    text-align: right;
+  }
+}
+
 /* --- Utilities -------------------------------------------------- */
 
 .visually-hidden {

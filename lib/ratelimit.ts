@@ -242,6 +242,52 @@ export async function checkRateLimit(
   return limitInMemory('global:all', GLOBAL_LIMIT, GLOBAL_WINDOW, 'global');
 }
 
+/* --- Analytics events ----------------------------------------------------
+   A SEPARATE budget from the AI limit above, on purpose.
+
+   If events shared the 60/min AI allowance, counting people could exhaust
+   the allowance for transcribing them — a resident unable to use the
+   microphone because the app had spent its quota on analytics. The AI limit
+   exists to protect spend; this one only stops someone inflating the
+   numbers or hammering Redis. Events cost nothing per call, so the ceiling
+   is far higher.
+   ------------------------------------------------------------------------ */
+
+const EVENTS_LIMIT = 600;
+const EVENTS_WINDOW = '60 s' as const;
+
+const eventsLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(EVENTS_LIMIT, EVENTS_WINDOW),
+      prefix: 'fbgm:events-rl',
+      ephemeralCache: new Map(),
+    })
+  : null;
+
+export async function checkEventsRateLimit(
+  visitorKey: string,
+): Promise<LimitResult> {
+  if (eventsLimiter) {
+    const r = await eventsLimiter.limit(visitorKey);
+    return {
+      success: r.success,
+      limit: r.limit,
+      remaining: r.remaining,
+      reset: r.reset,
+      scope: 'visitor',
+      degraded: false,
+    };
+  }
+
+  return limitInMemory(
+    `events:${visitorKey}`,
+    EVENTS_LIMIT,
+    EVENTS_WINDOW,
+    'visitor',
+  );
+}
+
 /**
  * Read the current global allowance WITHOUT consuming any of it.
  *

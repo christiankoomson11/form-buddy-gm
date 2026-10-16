@@ -28,6 +28,7 @@ import { visibleQuestions, type Answers } from '@/lib/forms';
 import { validateAnswer, validateForm, hasErrors, type Issue } from '@/lib/validate';
 import { MAX_RECORDING_SECONDS } from '@/lib/transcription';
 import { useRecorder } from './useRecorder';
+import { track } from './track';
 
 type Stage = 'intro' | 'questions' | 'summary';
 
@@ -164,7 +165,27 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
     if (!question) return;
 
     const result = await recorder.stopAndTranscribe(question.id);
-    if (!result) return;
+
+    if (!result) {
+      /*
+       * Distinguish "no microphone access" from "transcription broke".
+       * They need different fixes: one is a browser permission problem we
+       * might solve with better wording, the other is us.
+       */
+      const denied = /permission|microphone|cannot record/i.test(
+        recorder.error ?? '',
+      );
+      track(denied ? 'voice_denied' : 'voice_failed', form.id, {
+        questionIndex: index,
+      });
+      return;
+    }
+
+    track('voice_succeeded', form.id, { questionIndex: index });
+
+    if (!result.isEnglish) {
+      track('voice_translated', form.id, { languageCode: result.languageCode });
+    }
 
     /*
      * Append rather than replace. Someone correcting themselves records a
@@ -191,7 +212,7 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
         };
       });
     }
-  }, [question, recorder, answers, setAnswer]);
+  }, [question, recorder, answers, setAnswer, form.id, index]);
 
   /* --- Navigation -------------------------------------------------------- */
 
@@ -202,11 +223,15 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
     const found = validateAnswer(question, answers[question.id]);
     setIssues(found);
 
-    if (hasErrors(found)) return;
+    if (hasErrors(found)) {
+      track('error_shown', form.id, { questionIndex: index });
+      return;
+    }
 
     const hasWarning = found.some((i) => i.severity === 'warning');
     if (hasWarning && !acknowledged.has(question.id)) {
       setAcknowledged((prev) => new Set(prev).add(question.id));
+      track('warning_shown', form.id, { questionIndex: index });
       return;
     }
 
@@ -214,11 +239,15 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
     recorder.dismissError();
 
     if (index + 1 >= total) {
-      setIssues(validateForm(form, answers, applicable));
+      const all = validateForm(form, answers, applicable);
+      setIssues(all);
       setStage('summary');
+      track('form_completed', form.id);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setIndex(index + 1);
+      // Reaching a question is what builds the drop-off curve.
+      track('question_reached', form.id, { questionIndex: index + 1 });
     }
   }, [question, answers, index, total, form, applicable, acknowledged, recorder]);
 
@@ -232,6 +261,7 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
   }, [index, recorder]);
 
   const startOver = useCallback(() => {
+    track('form_restarted', form.id);
     wipe(form.id);
     setAnswers({});
     setSpoken({});
@@ -306,7 +336,15 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
         </div>
 
         <div className="actions">
-          <button type="button" className="btn" onClick={() => setStage('questions')}>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              setStage('questions');
+              track('form_started', form.id);
+              track('question_reached', form.id, { questionIndex: 0 });
+            }}
+          >
             {restored ? 'Carry on' : 'Start'} &rarr;
           </button>
           <span style={{ color: 'var(--ink-faint)', fontSize: '0.9375rem' }}>
@@ -413,7 +451,14 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
         </div>
 
         <div className="actions no-print">
-          <button type="button" className="btn" onClick={() => window.print()}>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              track('summary_printed', form.id);
+              window.print();
+            }}
+          >
             Print or save as PDF
           </button>
           <button
@@ -553,7 +598,10 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
                 <button
                   type="button"
                   className="btn btn-mic"
-                  onClick={recorder.start}
+                  onClick={() => {
+                    track('voice_attempted', form.id, { questionIndex: index });
+                    recorder.start();
+                  }}
                   disabled={recorder.status === 'requesting'}
                 >
                   <span className="mic-glyph" aria-hidden="true" />
