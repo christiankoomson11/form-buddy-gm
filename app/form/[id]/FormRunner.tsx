@@ -279,7 +279,7 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
       <>
         <p className="no-print" style={{ marginTop: '1.5rem' }}>
           <Link href="/" className="btn-quiet">
-            &larr; All forms
+            All forms
           </Link>
         </p>
 
@@ -345,10 +345,10 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
               track('question_reached', form.id, { questionIndex: 0 });
             }}
           >
-            {restored ? 'Carry on' : 'Start'} &rarr;
+            {restored ? 'Carry on' : 'Start'}
           </button>
-          <span style={{ color: 'var(--ink-faint)', fontSize: '0.9375rem' }}>
-            About {form.estimatedMinutes} minutes &middot; {total} questions
+          <span style={{ color: 'var(--ink-3)', fontSize: '0.9375rem' }}>
+            About {form.estimatedMinutes} minutes, {total} questions
           </span>
         </div>
       </>
@@ -398,15 +398,45 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
           </div>
         )}
 
-        <div className="card">
-          <h2 style={{ marginTop: 0 }}>{form.title}</h2>
+        {/*
+          Styled as a document rather than another screen: this is the
+          thing someone carries to a counter or reads down a phone, and it
+          should look like a record, not an app.
+        */}
+        <div className="doc">
+          <div className="doc-head">
+            <h2 style={{ marginTop: 0 }}>{form.title}</h2>
+            <p className="doc-meta">
+              Prepared with Form Buddy GM on{' '}
+              {new Date().toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+              . Not an application.
+            </p>
+          </div>
           <ul className="summary-list">
             {applicable.map((q) => {
               const raw = (answers[q.id] ?? '').trim();
-              const display =
-                q.type === 'choice'
-                  ? q.options?.find((o) => o.value === raw)?.label ?? raw
-                  : raw;
+              /*
+               * Dates arrive from the input as 2025-11-02. On a document
+               * someone hands across a counter that reads as data; written
+               * out it reads as a date.
+               */
+              let display = raw;
+              if (q.type === 'choice') {
+                display = q.options?.find((o) => o.value === raw)?.label ?? raw;
+              } else if (q.type === 'date' && raw) {
+                const parsed = new Date(raw);
+                if (!Number.isNaN(parsed.getTime())) {
+                  display = parsed.toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  });
+                }
+              }
               const original = spoken[q.id];
 
               return (
@@ -453,7 +483,7 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
         <div className="actions no-print">
           <button
             type="button"
-            className="btn"
+            className="btn btn-honey"
             onClick={() => {
               track('summary_printed', form.id);
               window.print();
@@ -507,6 +537,10 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
   return (
     <>
       <div className="progress no-print">
+        {/*
+          A segment per question, not a continuous bar: you can count what
+          is left at a glance, which a smooth fill hides.
+        */}
         <div
           className="progress-bar"
           role="progressbar"
@@ -515,10 +549,12 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
           aria-valuemax={total}
           aria-label={`Question ${index + 1} of ${total}`}
         >
-          <div className="progress-fill" style={{ width: `${((index + 1) / total) * 100}%` }} />
+          {applicable.map((q, i) => (
+            <span key={q.id} className="progress-seg" data-done={i <= index} />
+          ))}
         </div>
         <p className="progress-text">
-          Question {index + 1} of {total} &middot; {form.title}
+          Question {index + 1} of {total}
         </p>
       </div>
 
@@ -559,62 +595,84 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
 
         {canSpeak && (
           <div className="voice no-print">
-            {recorder.status === 'recording' ? (
-              <>
-                <div className="voice-live">
-                  <span className="voice-pulse" aria-hidden="true" />
-                  <span>
-                    Listening&hellip;{' '}
-                    <strong>
-                      {Math.floor(recorder.seconds / 60)}:
-                      {String(recorder.seconds % 60).padStart(2, '0')}
-                    </strong>
-                  </span>
-                </div>
-                <p className="voice-hint">
-                  Say your answer, then press Done. Stops on its own after{' '}
-                  {MAX_RECORDING_SECONDS} seconds.
-                </p>
-                <div className="voice-actions">
-                  <button type="button" className="btn" onClick={handleStop}>
-                    Done &mdash; write it down
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={recorder.cancel}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </>
-            ) : recorder.status === 'transcribing' ? (
-              <div className="voice-live">
+            {recorder.status === 'transcribing' ? (
+              <div className="voice-busy">
                 <span className="spinner" aria-hidden="true" />
-                <span>Writing down what you said&hellip;</span>
+                Writing down what you said&hellip;
               </div>
             ) : (
               <>
                 <button
                   type="button"
-                  className="btn btn-mic"
+                  className="mic"
+                  data-recording={recorder.status === 'recording'}
+                  /*
+                   * The live loudness drives the ring. A custom property
+                   * rather than React state on the element keeps this off
+                   * the render path — it updates every animation frame.
+                   */
+                  style={
+                    {
+                      '--level': recorder.status === 'recording' ? recorder.level : 0,
+                    } as React.CSSProperties
+                  }
                   onClick={() => {
-                    track('voice_attempted', form.id, { questionIndex: index });
-                    recorder.start();
+                    if (recorder.status === 'recording') {
+                      void handleStop();
+                    } else {
+                      track('voice_attempted', form.id, { questionIndex: index });
+                      void recorder.start();
+                    }
                   }}
                   disabled={recorder.status === 'requesting'}
+                  aria-label={
+                    recorder.status === 'recording'
+                      ? 'Stop recording and write down what I said'
+                      : value
+                        ? 'Add more to this answer by speaking'
+                        : 'Answer this question by speaking'
+                  }
                 >
-                  <span className="mic-glyph" aria-hidden="true" />
-                  {recorder.status === 'requesting'
-                    ? 'Waiting for permission…'
-                    : value
-                      ? 'Add more by speaking'
-                      : 'Answer by speaking'}
+                  {recorder.status === 'recording' && (
+                    <span className="mic-ring" aria-hidden="true" />
+                  )}
+                  <span
+                    className={recorder.status === 'recording' ? 'mic-stop' : 'mic-glyph'}
+                    aria-hidden="true"
+                  />
                 </button>
-                <p className="voice-hint">
-                  Any language. We will put an English version on the form and
-                  keep your own words.
+
+                <p className="voice-caption">
+                  {recorder.status === 'recording' ? (
+                    <>
+                      Listening.{' '}
+                      <strong>
+                        {Math.floor(recorder.seconds / 60)}:
+                        {String(recorder.seconds % 60).padStart(2, '0')}
+                      </strong>{' '}
+                      Press again when you have finished. Stops on its own after{' '}
+                      {MAX_RECORDING_SECONDS} seconds.
+                    </>
+                  ) : recorder.status === 'requesting' ? (
+                    'Your browser is asking whether we can use the microphone.'
+                  ) : value ? (
+                    'Press to add more. Speak any language.'
+                  ) : (
+                    'Press and say your answer. Any language.'
+                  )}
                 </p>
+
+                {recorder.status === 'recording' && (
+                  <div className="voice-actions">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={recorder.cancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -745,10 +803,10 @@ export default function FormRunner({ form }: { form: FormDefinition }) {
 
         <div className="actions no-print">
           <button type="button" className="btn btn-secondary" onClick={goBack}>
-            &larr; Back
+            Back
           </button>
-          <button type="button" className="btn" onClick={goNext} disabled={busy}>
-            {index + 1 >= total ? 'Check my answers' : 'Next'} &rarr;
+          <button type="button" className="btn btn-honey" onClick={goNext} disabled={busy}>
+            {index + 1 >= total ? 'Check my answers' : 'Next'}
           </button>
         </div>
       </div>

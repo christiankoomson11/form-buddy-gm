@@ -1,104 +1,127 @@
-/* ---------------------------------------------------------------
-   Form Buddy GM — design tokens
+/* ===========================================================================
+   Form Buddy GM — visual system
 
-   Priorities, in order, because this tool is aimed at residents with
-   low digital confidence:
-     1. Legibility  — large base size, generous line height, high contrast
-     2. Big targets — nothing smaller than 44px to tap
-     3. Obvious focus — a visible ring, never removed
-     4. Prints well — the summary is the offline/assisted route
-   --------------------------------------------------------------- */
+   THE SUBJECT IS A VOICE.
+
+   Everything here serves one moment: a person speaks, and watches their own
+   words appear on a form they could not face writing. That moment gets the
+   boldness — the microphone, its live level ring, the transcript arriving.
+   Every other surface stays quiet, because the people using this are often
+   anxious and short of time, and decoration is one more thing to look past.
+
+   PALETTE. Inked indigo and honey amber on warm near-white. Indigo rather
+   than the municipal teal every council service reaches for; honey because
+   warmth is the right register for "someone is listening", and because
+   Manchester's bee is in the association without a honeycomb being drawn
+   anywhere.
+
+   Honey never carries text on a light background — it fails contrast and no
+   amount of liking it changes that. It is a fill, with indigo on top. Where
+   amber-coloured text is wanted, --honey-deep does the job at 5.6:1.
+
+   All pairs verified: 5.3:1 at worst, most above 7:1.
+   =========================================================================== */
 
 :root {
-  --ink: #15202b;
-  --ink-soft: #46586b;
-  --ink-faint: #6b7d91;
-  --paper: #f7f8fa;
+  /* Ink */
+  --ink: #141a2e;
+  --ink-2: #4a5270;
+  --ink-3: #6f7694;
+
+  /* Ground */
+  --paper: #faf9f6;
   --surface: #ffffff;
-  --line: #d9dee5;
-  --line-strong: #b6bfcb;
+  --sunken: #f3f1ec;
+  --line: #e2e0da;
+  --line-2: #c9c6bd;
 
-  --accent: #0b5d6b;
-  --accent-ink: #ffffff;
-  --accent-wash: #e6f1f3;
-  --accent-line: #9cc4cc;
+  /* Honey — the action colour */
+  --honey: #f0a92b;
+  --honey-soft: #fdf1d8;
+  --honey-line: #e8c98a;
+  --honey-deep: #8a5a00;
 
-  --warn: #8a5000;
-  --warn-wash: #fdf3e3;
-  --warn-line: #e8c48c;
+  /* Brick — live, recording, stop. Red because red is correct here. */
+  --brick: #b4432c;
+  --brick-soft: #fbeae6;
+  --brick-line: #e8b3a5;
 
-  --danger: #a01b2b;
-  --danger-wash: #fdeced;
-  --danger-line: #eeb3ba;
+  --grass: #2f6b46;
+  --grass-soft: #e8f2ec;
 
-  --ok: #1d6b3f;
-  --ok-wash: #e8f4ec;
+  /* On-honey text */
+  --on-honey: #141a2e;
 
-  --radius: 10px;
-  --radius-lg: 16px;
-  --shadow: 0 1px 2px rgba(21, 32, 43, 0.06), 0 4px 16px rgba(21, 32, 43, 0.05);
-  --wrap: 44rem;
+  --r-sm: 8px;
+  --r: 14px;
+  --r-lg: 22px;
+  --r-full: 999px;
 
-  --font: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+  --shadow-1: 0 1px 2px rgba(20, 26, 46, 0.05);
+  --shadow-2: 0 2px 6px rgba(20, 26, 46, 0.06), 0 10px 30px rgba(20, 26, 46, 0.06);
+  --shadow-lift: 0 4px 10px rgba(20, 26, 46, 0.08), 0 18px 45px rgba(20, 26, 46, 0.1);
+
+  --measure: 36rem;
+  --wrap: 46rem;
+
+  --display: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --body: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --ink: #e8edf2;
-    --ink-soft: #a9b7c6;
-    --ink-faint: #8595a6;
-    --paper: #11171e;
-    --surface: #1a222c;
-    --line: #2f3b48;
-    --line-strong: #44525f;
+    --ink: #e7e9f2;
+    --ink-2: #a2a9c2;
+    --ink-3: #848ca7;
 
-    --accent: #6fc6d4;
-    --accent-ink: #0a1418;
-    --accent-wash: #15303a;
-    --accent-line: #2f5f6b;
+    --paper: #10131f;
+    --surface: #191e2e;
+    --sunken: #141926;
+    --line: #2b3145;
+    --line-2: #3e4661;
 
-    --warn: #e8be7d;
-    --warn-wash: #332714;
-    --warn-line: #5c4823;
+    --honey: #f0a92b;
+    --honey-soft: #2e2311;
+    --honey-line: #574426;
+    --honey-deep: #f0a92b;
 
-    --danger: #f0a0aa;
-    --danger-wash: #39191e;
-    --danger-line: #6b3038;
+    --brick: #f09478;
+    --brick-soft: #2e1811;
+    --brick-line: #5c3226;
 
-    --ok: #7fcb9c;
-    --ok-wash: #16301f;
+    --grass: #7cc79b;
+    --grass-soft: #14291d;
 
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+    --on-honey: #10131f;
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-lift: 0 4px 10px rgba(0, 0, 0, 0.4), 0 18px 45px rgba(0, 0, 0, 0.35);
   }
 }
 
 :root[data-theme='dark'] {
-  --ink: #e8edf2;
-  --ink-soft: #a9b7c6;
-  --ink-faint: #8595a6;
-  --paper: #11171e;
-  --surface: #1a222c;
-  --line: #2f3b48;
-  --line-strong: #44525f;
-
-  --accent: #6fc6d4;
-  --accent-ink: #0a1418;
-  --accent-wash: #15303a;
-  --accent-line: #2f5f6b;
-
-  --warn: #e8be7d;
-  --warn-wash: #332714;
-  --warn-line: #5c4823;
-
-  --danger: #f0a0aa;
-  --danger-wash: #39191e;
-  --danger-line: #6b3038;
-
-  --ok: #7fcb9c;
-  --ok-wash: #16301f;
-
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --ink: #e7e9f2;
+  --ink-2: #a2a9c2;
+  --ink-3: #848ca7;
+  --paper: #10131f;
+  --surface: #191e2e;
+  --sunken: #141926;
+  --line: #2b3145;
+  --line-2: #3e4661;
+  --honey: #f0a92b;
+  --honey-soft: #2e2311;
+  --honey-line: #574426;
+  --honey-deep: #f0a92b;
+  --brick: #f09478;
+  --brick-soft: #2e1811;
+  --brick-line: #5c3226;
+  --grass: #7cc79b;
+  --grass-soft: #14291d;
+  --on-honey: #10131f;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-lift: 0 4px 10px rgba(0, 0, 0, 0.4), 0 18px 45px rgba(0, 0, 0, 0.35);
 }
 
 *,
@@ -115,41 +138,43 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font);
+  font-family: var(--body);
   font-size: 1.0625rem;
   line-height: 1.6;
+  font-feature-settings: 'ss01';
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .wrap {
   width: 100%;
   max-width: var(--wrap);
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
 main.wrap {
   flex: 1;
-  padding-bottom: 4rem;
+  padding-bottom: 5rem;
 }
 
-/* --- Focus: visible everywhere, never removed ------------------- */
+/* --- Focus ------------------------------------------------------------- */
 
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
 }
 
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--accent);
-  color: var(--accent-ink);
-  padding: 12px 20px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 22px;
   z-index: 100;
   font-weight: 600;
 }
@@ -158,7 +183,7 @@ main.wrap {
   left: 0;
 }
 
-/* --- Header / footer -------------------------------------------- */
+/* --- Masthead ----------------------------------------------------------- */
 
 .site-header {
   background: var(--surface);
@@ -168,234 +193,305 @@ main.wrap {
 .header-inner {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
-  align-items: baseline;
+  gap: 6px 18px;
+  align-items: center;
   justify-content: space-between;
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding: 16px 0;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   color: var(--ink);
   text-decoration: none;
-  font-size: 1.125rem;
-  letter-spacing: -0.01em;
+  font-family: var(--display);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
-.brand strong {
-  color: var(--accent);
-}
-
+/*
+ * The mark is a sound wave, not a logo: three rising bars, the shape a
+ * voice makes. It is the only ornament in the masthead.
+ */
 .brand-mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: var(--accent);
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 20px;
   flex: none;
-  position: relative;
 }
 
-.brand-mark::after {
-  content: '';
-  position: absolute;
-  inset: 6px 5px;
-  border-left: 2px solid var(--accent-ink);
-  border-bottom: 2px solid var(--accent-ink);
-  border-radius: 0 0 0 2px;
+.brand-mark i {
+  display: block;
+  width: 3.5px;
+  background: var(--honey);
+  border-radius: var(--r-full);
 }
+
+.brand-mark i:nth-child(1) { height: 8px; }
+.brand-mark i:nth-child(2) { height: 18px; }
+.brand-mark i:nth-child(3) { height: 12px; }
 
 .header-note {
   margin: 0;
   font-size: 0.8125rem;
-  color: var(--ink-faint);
+  color: var(--ink-3);
 }
 
 .site-footer {
   background: var(--surface);
   border-top: 1px solid var(--line);
-  padding: 20px 0 28px;
+  padding: 26px 0 34px;
   font-size: 0.875rem;
-  color: var(--ink-soft);
+  color: var(--ink-2);
 }
 
 .site-footer p {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
+  max-width: var(--measure);
 }
 
 .site-footer p:last-child {
   margin-bottom: 0;
 }
 
-/* --- Typography ------------------------------------------------- */
+/* --- Type --------------------------------------------------------------- */
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
 
 h1 {
-  font-size: clamp(1.625rem, 5vw, 2.125rem);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  margin: 2rem 0 0.5rem;
+  font-size: clamp(2rem, 7vw, 2.75rem);
+  line-height: 1.08;
+  margin: 2.25rem 0 0.75rem;
 }
 
 h2 {
-  font-size: 1.25rem;
-  line-height: 1.3;
-  margin: 2rem 0 0.5rem;
+  font-size: clamp(1.3rem, 3.6vw, 1.5rem);
+  line-height: 1.2;
+  margin: 2.5rem 0 0.6rem;
 }
 
 h3 {
   font-size: 1.0625rem;
-  margin: 1.5rem 0 0.25rem;
+  letter-spacing: -0.015em;
+  margin: 1.75rem 0 0.35rem;
+}
+
+p {
+  max-width: var(--measure);
 }
 
 .lede {
-  font-size: 1.125rem;
-  color: var(--ink-soft);
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
   margin: 0 0 2rem;
-  max-width: 34rem;
 }
 
-/* --- Cards ------------------------------------------------------ */
+/* --- Hero ---------------------------------------------------------------
+   The one place the design raises its voice.
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  box-shadow: var(--shadow);
+   The headline does not describe a multilingual tool, it is one: the same
+   sentence, stacked, in the languages Greater Manchester actually speaks.
+   Anyone who reads one of those lines understands the product before
+   reading a word of English.
+   ----------------------------------------------------------------------- */
+
+.hero {
+  padding: 3rem 0 2.5rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 2.5rem;
 }
 
-.card + .card {
-  margin-top: 14px;
+.hero h1 {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.4rem, 10vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 
-/* --- Form picker ------------------------------------------------ */
+.hero-langs {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0 0 0 1rem;
+  border-left: 3px solid var(--honey);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.hero-langs li {
+  font-size: clamp(1.0625rem, 3.4vw, 1.3rem);
+  line-height: 1.45;
+  color: var(--ink-2);
+  font-family: var(--display);
+  letter-spacing: -0.015em;
+  /*
+   * The Urdu and Arabic lines keep dir="rtl", so their words and
+   * punctuation order correctly. Only the block is pinned left, so all six
+   * languages start from the same rule instead of the stack alternating
+   * edges — which read as broken rather than as two writing directions.
+   */
+  text-align: left;
+}
+
+.hero-sub {
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 2rem;
+  max-width: 30rem;
+}
+
+.hero-sub strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* --- Form picker -------------------------------------------------------- */
 
 .form-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .form-link {
   display: block;
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius-lg);
-  padding: 20px;
+  border-radius: var(--r-lg);
+  padding: 24px 24px 22px;
   text-decoration: none;
   color: inherit;
-  box-shadow: var(--shadow);
-  transition: transform 0.12s ease, border-color 0.12s ease;
+  box-shadow: var(--shadow-1);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .form-link:hover {
-  border-color: var(--accent-line);
-  transform: translateY(-1px);
+  border-color: var(--line-2);
+  box-shadow: var(--shadow-2);
 }
 
 .form-link h2 {
-  margin: 0 0 6px;
-  font-size: 1.1875rem;
-  color: var(--accent);
+  font-size: 1.3125rem;
+  margin: 0 0 0.4rem;
+  color: var(--ink);
 }
 
 .form-link p {
   margin: 0;
-  color: var(--ink-soft);
-  font-size: 0.9375rem;
+  color: var(--ink-2);
+  font-size: 0.96875rem;
+  line-height: 1.5;
 }
 
 .form-meta {
-  margin-top: 12px;
+  margin-top: 14px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
+  font-size: 0.875rem;
+  color: var(--ink-3);
 }
 
-.chip {
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: var(--accent-wash);
-  color: var(--accent);
-  border: 1px solid var(--accent-line);
-  padding: 3px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-/* --- Progress --------------------------------------------------- */
+/* --- Progress -----------------------------------------------------------
+   A segment per question rather than a continuous bar: you can count what
+   is left, which a smooth bar hides.
+   ----------------------------------------------------------------------- */
 
 .progress {
-  margin: 1.5rem 0 1rem;
+  margin: 1.75rem 0 1.25rem;
 }
 
 .progress-bar {
-  height: 8px;
-  background: var(--line);
-  border-radius: 999px;
-  overflow: hidden;
+  display: flex;
+  gap: 3px;
+  height: 6px;
 }
 
-.progress-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 999px;
-  transition: width 0.3s ease;
+.progress-seg {
+  flex: 1;
+  background: var(--line);
+  border-radius: var(--r-full);
+}
+
+.progress-seg[data-done='true'] {
+  background: var(--honey);
 }
 
 .progress-text {
   font-size: 0.875rem;
-  color: var(--ink-soft);
-  margin: 8px 0 0;
+  color: var(--ink-3);
+  margin: 10px 0 0;
 }
 
-/* --- The question ----------------------------------------------- */
+/* --- The question ------------------------------------------------------- */
 
 .question {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow);
+  border-radius: var(--r-lg);
+  padding: 28px 24px 26px;
+  box-shadow: var(--shadow-2);
 }
 
 .question-label {
   display: block;
-  font-size: 1.3125rem;
-  line-height: 1.35;
+  font-family: var(--display);
+  font-size: clamp(1.375rem, 4.6vw, 1.625rem);
+  line-height: 1.2;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  margin-bottom: 8px;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.5rem;
+  text-wrap: balance;
+}
+
+.question-optional {
+  display: block;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--ink-3);
+  letter-spacing: 0;
+  margin-top: 4px;
 }
 
 .question-help {
-  color: var(--ink-soft);
-  font-size: 0.9375rem;
-  margin: 0 0 4px;
+  color: var(--ink-2);
+  font-size: 0.96875rem;
+  margin: 0 0 0.5rem;
 }
 
 .question-why {
-  margin: 12px 0 20px;
-  padding: 12px 14px;
-  background: var(--accent-wash);
-  border: 1px solid var(--accent-line);
-  border-radius: var(--radius);
-  font-size: 0.875rem;
-  color: var(--ink);
+  margin: 14px 0 20px;
+  padding: 14px 16px;
+  background: var(--sunken);
+  border-radius: var(--r);
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+  border-left: 3px solid var(--honey);
 }
 
 .question-why strong {
   display: block;
-  margin-bottom: 2px;
-  color: var(--accent);
+  color: var(--ink);
+  font-weight: 600;
+  margin-bottom: 3px;
 }
 
-/* --- Inputs ----------------------------------------------------- */
+/* --- Inputs ------------------------------------------------------------- */
 
 label {
   display: block;
@@ -413,20 +509,27 @@ select {
   font-size: 1.0625rem;
   color: var(--ink);
   background: var(--paper);
-  border: 2px solid var(--line-strong);
-  border-radius: var(--radius);
-  padding: 13px 14px;
-  min-height: 52px;
+  border: 2px solid var(--line-2);
+  border-radius: var(--r);
+  padding: 14px 15px;
+  min-height: 54px;
+  transition: border-color 0.12s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--ink);
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 130px;
   resize: vertical;
+  line-height: 1.55;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--ink-faint);
+  color: var(--ink-3);
 }
 
 .choice-list {
@@ -440,17 +543,18 @@ textarea::placeholder {
 .choice {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 13px;
   background: var(--paper);
-  border: 2px solid var(--line-strong);
-  border-radius: var(--radius);
-  padding: 14px;
+  border: 2px solid var(--line-2);
+  border-radius: var(--r);
+  padding: 15px 16px;
   cursor: pointer;
-  min-height: 52px;
+  min-height: 54px;
+  transition: border-color 0.12s ease, background 0.12s ease;
 }
 
 .choice:hover {
-  border-color: var(--accent-line);
+  border-color: var(--ink-3);
 }
 
 .choice input {
@@ -458,163 +562,182 @@ textarea::placeholder {
   height: 22px;
   margin: 2px 0 0;
   flex: none;
-  accent-color: var(--accent);
+  accent-color: var(--ink);
 }
 
 .choice-text {
   flex: 1;
+  font-size: 1.0625rem;
 }
 
 .choice-text span {
   display: block;
   font-size: 0.875rem;
-  color: var(--ink-soft);
-  margin-top: 2px;
+  color: var(--ink-2);
+  margin-top: 3px;
+  line-height: 1.45;
 }
 
 .choice[data-selected='true'] {
-  border-color: var(--accent);
-  background: var(--accent-wash);
+  border-color: var(--ink);
+  background: var(--honey-soft);
 }
 
-/* --- Buttons ---------------------------------------------------- */
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 24px;
-  align-items: center;
+.field-label-or {
+  margin: 20px 0 9px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink-2);
 }
+
+/* --- Buttons ------------------------------------------------------------ */
 
 .btn {
-  font: inherit;
+  font-family: var(--body);
   font-size: 1.0625rem;
   font-weight: 600;
-  padding: 13px 24px;
-  min-height: 52px;
-  border-radius: var(--radius);
+  padding: 14px 26px;
+  min-height: 54px;
+  border-radius: var(--r);
   border: 2px solid transparent;
   cursor: pointer;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--ink);
+  color: var(--paper);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 .btn:hover:not(:disabled) {
-  filter: brightness(1.08);
+  box-shadow: var(--shadow-2);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
+}
+
+.btn-honey {
+  background: var(--honey);
+  color: var(--on-honey);
 }
 
 .btn-secondary {
   background: transparent;
   color: var(--ink);
-  border-color: var(--line-strong);
+  border-color: var(--line-2);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  border-color: var(--ink-soft);
-  filter: none;
+  border-color: var(--ink);
+  box-shadow: none;
 }
 
 .btn-quiet {
   background: none;
   border: 0;
-  color: var(--accent);
+  color: var(--ink);
+  font-family: var(--body);
   font-weight: 600;
+  font-size: 0.9375rem;
   text-decoration: underline;
-  padding: 10px 4px;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--line-2);
+  padding: 11px 2px;
   min-height: 44px;
   cursor: pointer;
-  font-size: 0.9375rem;
+}
+
+.btn-quiet:hover {
+  text-decoration-color: var(--ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 26px;
+  align-items: center;
 }
 
 .btn-row-spacer {
   flex: 1;
 }
 
-/* --- Notices ---------------------------------------------------- */
+/* === THE MICROPHONE =====================================================
+   The loudest thing in the design, and the only thing that moves on its
+   own — because it is reacting to a real voice, not decorating the page.
 
-.notice {
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  margin: 16px 0;
-  font-size: 0.9375rem;
-  border: 1px solid;
-}
-
-.notice p {
-  margin: 0 0 6px;
-}
-
-.notice p:last-child {
-  margin-bottom: 0;
-}
-
-.notice-check {
-  background: var(--warn-wash);
-  border-color: var(--warn-line);
-  color: var(--ink);
-}
-
-.notice-check strong {
-  color: var(--warn);
-}
-
-.notice-error {
-  background: var(--danger-wash);
-  border-color: var(--danger-line);
-  color: var(--ink);
-}
-
-.notice-error strong {
-  color: var(--danger);
-}
-
-.notice-info {
-  background: var(--accent-wash);
-  border-color: var(--accent-line);
-  color: var(--ink);
-}
-
-.notice-info strong {
-  color: var(--accent);
-}
-
-/* --- Voice input ------------------------------------------------
-   The primary way to answer, so it sits above the text field and is
-   the largest target on the screen.
-   ---------------------------------------------------------------- */
+   --level is set from the live audio amplitude, so the ring answers the
+   person speaking. A fixed pulse would be theatre; this is feedback, and
+   it is how someone knows the microphone is actually hearing them.
+   ======================================================================= */
 
 .voice {
-  margin: 20px 0 8px;
-  padding: 18px;
-  background: var(--accent-wash);
-  border: 1px solid var(--accent-line);
-  border-radius: var(--radius-lg);
+  margin: 22px 0 10px;
+  padding: 24px 20px;
+  background: var(--sunken);
+  border-radius: var(--r-lg);
+  text-align: center;
 }
 
-.btn-mic {
-  width: 100%;
-  font-size: 1.125rem;
-  min-height: 60px;
-  gap: 12px;
+.mic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  height: 108px;
+  border-radius: var(--r-full);
+  border: 0;
+  background: var(--honey);
+  color: var(--on-honey);
+  cursor: pointer;
+  box-shadow: var(--shadow-lift);
+  transition: transform 0.12s ease;
 }
 
-/* A microphone drawn in CSS: no icon font, no SVG sprite, no extra
-   request, and it inherits currentColor in both themes. */
+.mic:hover:not(:disabled) {
+  transform: scale(1.03);
+}
+
+.mic:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.mic:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.mic[data-recording='true'] {
+  background: var(--brick);
+  color: #fff;
+}
+
+/* The live ring. Scale is driven by --level (0–1) from the analyser. */
+.mic-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: var(--r-full);
+  border: 3px solid var(--brick);
+  opacity: calc(0.25 + (var(--level, 0) * 0.75));
+  transform: scale(calc(1 + (var(--level, 0) * 0.22)));
+  transition: transform 0.08s linear, opacity 0.08s linear;
+  pointer-events: none;
+}
+
 .mic-glyph {
-  width: 15px;
-  height: 24px;
-  flex: none;
+  width: 26px;
+  height: 40px;
   position: relative;
 }
 
@@ -622,178 +745,207 @@ textarea::placeholder {
   content: '';
   position: absolute;
   top: 0;
-  left: 2px;
-  width: 11px;
-  height: 15px;
-  border-radius: 6px;
+  left: 5px;
+  width: 16px;
+  height: 23px;
+  border-radius: var(--r-full);
   background: currentColor;
 }
 
 .mic-glyph::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: 2px;
   left: 0;
-  width: 15px;
-  height: 9px;
-  border: 2px solid currentColor;
+  width: 26px;
+  height: 15px;
+  border: 3px solid currentColor;
   border-top: 0;
-  border-radius: 0 0 9px 9px;
-  border-bottom-width: 2px;
+  border-radius: 0 0 14px 14px;
 }
 
-.voice-hint {
-  margin: 10px 0 0;
-  font-size: 0.875rem;
-  color: var(--ink-soft);
-  text-align: center;
+.mic-stop {
+  width: 26px;
+  height: 26px;
+  background: currentColor;
+  border-radius: 5px;
 }
 
-.voice-live {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-size: 1.0625rem;
-  padding: 10px 0;
+.voice-caption {
+  margin: 16px auto 0;
+  font-size: 1rem;
+  color: var(--ink-2);
+  max-width: 24rem;
 }
 
-.voice-pulse {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--danger);
-  flex: none;
-  animation: pulse 1.4s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.45;
-    transform: scale(0.82);
-  }
+.voice-caption strong {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .voice-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 14px;
+  justify-content: center;
+  margin-top: 16px;
 }
 
-.voice-actions .btn {
-  flex: 1 1 auto;
+.voice-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 1rem;
+  color: var(--ink-2);
 }
 
-.field-label-or {
-  margin: 18px 0 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--ink-soft);
-}
-
-.question-optional {
-  font-weight: 400;
-  font-size: 0.875rem;
-  color: var(--ink-faint);
-  display: block;
-  margin-top: 2px;
-}
-
-/* --- The resident's own words ------------------------------------ */
+/* --- The resident's own words ------------------------------------------- */
 
 .original-words {
-  margin-top: 16px;
-  padding: 14px 16px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius);
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: var(--honey-soft);
+  border: 1px solid var(--honey-line);
+  border-radius: var(--r);
 }
 
 .original-words h3 {
-  margin: 0 0 6px;
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-faint);
-  font-weight: 700;
+  margin: 0 0 7px;
+  font-size: 0.875rem;
+  color: var(--honey-deep);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .original-words p {
   margin: 0;
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--ink);
 }
 
 .original-note {
-  margin-top: 10px !important;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
+  margin-top: 12px !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--honey-line);
   font-size: 0.8125rem !important;
-  color: var(--ink-soft);
+  color: var(--ink-2);
+  line-height: 1.5;
 }
 
-.summary-original {
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: var(--paper);
-  border-left: 3px solid var(--accent-line);
-  border-radius: 0 var(--radius) var(--radius) 0;
+/* --- Notices ------------------------------------------------------------ */
+
+.notice {
+  border-radius: var(--r);
+  padding: 16px 18px;
+  margin: 18px 0;
   font-size: 0.9375rem;
+  border: 1px solid;
+  line-height: 1.55;
 }
 
-.summary-original-label {
-  display: block;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-faint);
-  font-weight: 700;
-  margin-bottom: 2px;
+.notice p {
+  margin: 0 0 7px;
+  max-width: none;
 }
 
-/* --- AI explanation block --------------------------------------- */
-
-.ai-block {
-  margin: 16px 0 0;
-  padding: 16px;
-  background: var(--paper);
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--radius);
-  font-size: 0.9375rem;
-}
-
-.ai-block h3 {
-  margin: 0 0 6px;
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-faint);
-  font-weight: 700;
-}
-
-.ai-block p {
-  margin: 0 0 8px;
-}
-
-.ai-block p:last-child {
+.notice p:last-child {
   margin-bottom: 0;
 }
 
-.ai-source {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-  font-size: 0.8125rem;
-  color: var(--ink-faint);
+.notice strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 
-/* --- Summary ---------------------------------------------------- */
+.notice-check {
+  background: var(--honey-soft);
+  border-color: var(--honey-line);
+  color: var(--ink);
+}
+
+.notice-check strong {
+  color: var(--honey-deep);
+}
+
+.notice-error {
+  background: var(--brick-soft);
+  border-color: var(--brick-line);
+  color: var(--ink);
+}
+
+.notice-error strong {
+  color: var(--brick);
+}
+
+.notice-info {
+  background: var(--sunken);
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+
+.notice-info strong {
+  color: var(--ink);
+}
+
+/* --- Cards -------------------------------------------------------------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 26px 24px;
+  box-shadow: var(--shadow-1);
+}
+
+.card + .card {
+  margin-top: 16px;
+}
+
+.evidence-list {
+  margin: 10px 0 0;
+  padding-left: 1.3rem;
+  color: var(--ink-2);
+}
+
+.evidence-list li {
+  margin-bottom: 8px;
+  line-height: 1.55;
+}
+
+/* --- Summary, as a document ---------------------------------------------
+   Deliberately a different texture from the app around it: this is the
+   thing the resident carries to a counter, so it should look like a
+   document, not like another screen.
+   ----------------------------------------------------------------------- */
+
+.doc {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 30px 26px;
+  box-shadow: var(--shadow-2);
+}
+
+.doc-head {
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 4px;
+}
+
+.doc-head h2 {
+  margin: 0 0 6px;
+  font-size: 1.4375rem;
+}
+
+.doc-meta {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ink-3);
+  max-width: none;
+}
 
 .summary-list {
   list-style: none;
@@ -802,10 +954,10 @@ textarea::placeholder {
 }
 
 .summary-item {
-  padding: 14px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--line);
   display: grid;
-  gap: 2px;
+  gap: 3px;
 }
 
 .summary-item:last-child {
@@ -814,74 +966,83 @@ textarea::placeholder {
 
 .summary-q {
   font-size: 0.875rem;
-  color: var(--ink-soft);
+  color: var(--ink-3);
+  line-height: 1.4;
 }
 
 .summary-a {
   font-size: 1.0625rem;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .summary-a--empty {
   font-weight: 400;
-  color: var(--ink-faint);
+  color: var(--ink-3);
   font-style: italic;
 }
 
-.evidence-list {
-  margin: 8px 0 0;
-  padding-left: 1.25rem;
+.summary-original {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: var(--honey-soft);
+  border-left: 3px solid var(--honey);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 0.96875rem;
 }
 
-.evidence-list li {
-  margin-bottom: 6px;
+.summary-original-label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--honey-deep);
+  font-weight: 600;
+  margin-bottom: 3px;
 }
 
-/* --- Stats dashboard --------------------------------------------- */
+/* --- Stats -------------------------------------------------------------- */
 
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 12px;
-  margin: 16px 0 20px;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 14px;
+  margin: 18px 0 24px;
 }
 
 .stat {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 14px 12px;
-  text-align: center;
+  background: var(--sunken);
+  border-radius: var(--r);
+  padding: 16px 14px;
 }
 
 .stat-value {
   display: block;
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--accent);
+  font-family: var(--display);
+  font-size: 2.125rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
   display: block;
   font-size: 0.8125rem;
-  color: var(--ink-soft);
-  margin-top: 4px;
+  color: var(--ink-2);
+  margin-top: 7px;
 }
 
 .funnel {
   list-style: none;
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   padding: 0;
 }
 
 .funnel-row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 4px;
-  padding: 10px 0;
+  gap: 5px;
+  padding: 11px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -892,16 +1053,16 @@ textarea::placeholder {
 .funnel-label {
   font-size: 0.9375rem;
   display: flex;
-  gap: 8px;
+  gap: 9px;
   align-items: baseline;
+  color: var(--ink);
 }
 
 .funnel-n {
   flex: none;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--ink-faint);
-  min-width: 1.2em;
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+  min-width: 1.3em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -909,35 +1070,35 @@ textarea::placeholder {
   display: block;
   height: 10px;
   background: var(--line);
-  border-radius: 999px;
+  border-radius: var(--r-full);
   overflow: hidden;
 }
 
 .funnel-fill {
   display: block;
   height: 100%;
-  background: var(--accent);
-  border-radius: 999px;
-  min-width: 2px;
+  background: var(--honey);
+  border-radius: var(--r-full);
+  min-width: 3px;
 }
 
 .funnel-count {
   font-size: 0.8125rem;
-  color: var(--ink-soft);
+  color: var(--ink-2);
   font-variant-numeric: tabular-nums;
 }
 
 .funnel-count em {
-  color: var(--danger);
+  color: var(--brick);
   font-style: normal;
   font-weight: 600;
-  margin-left: 6px;
+  margin-left: 7px;
 }
 
-@media (min-width: 34rem) {
+@media (min-width: 36rem) {
   .funnel-row {
-    grid-template-columns: 1fr 120px 70px;
-    gap: 12px;
+    grid-template-columns: 1fr 130px 76px;
+    gap: 14px;
     align-items: center;
   }
 
@@ -946,7 +1107,7 @@ textarea::placeholder {
   }
 }
 
-/* --- Utilities -------------------------------------------------- */
+/* --- Utilities ----------------------------------------------------------- */
 
 .visually-hidden {
   position: absolute;
@@ -962,12 +1123,13 @@ textarea::placeholder {
 
 .spinner {
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid currentColor;
+  width: 17px;
+  height: 17px;
+  border: 2.5px solid currentColor;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  flex: none;
 }
 
 @keyframes spin {
@@ -984,17 +1146,27 @@ textarea::placeholder {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  /* The ring still responds to the voice, just without easing. */
+  .mic-ring {
+    transition: none !important;
+  }
 }
 
-/* --- Print: the assisted / offline route ------------------------ */
+/* --- Print: the assisted route ------------------------------------------ */
 
 @media print {
   :root {
     --ink: #000;
-    --ink-soft: #333;
+    --ink-2: #333;
+    --ink-3: #555;
     --paper: #fff;
     --surface: #fff;
+    --sunken: #fff;
     --line: #999;
+    --honey-soft: #fff;
+    --honey-line: #999;
+    --honey-deep: #000;
   }
 
   body {
@@ -1006,25 +1178,30 @@ textarea::placeholder {
   .site-header,
   .site-footer,
   .actions,
+  .voice,
   .no-print,
   .skip-link {
     display: none !important;
   }
 
-  .card,
-  .question {
+  .doc,
+  .card {
     border: 1px solid #999;
     box-shadow: none;
     break-inside: avoid;
+    padding: 0;
+  }
+
+  .doc {
+    border: 0;
   }
 
   .summary-item {
     break-inside: avoid;
   }
 
-  a[href]::after {
-    content: ' (' attr(href) ')';
-    font-size: 9pt;
-    color: #555;
+  .summary-original {
+    border-left: 2px solid #999;
+    background: #fff;
   }
 }
